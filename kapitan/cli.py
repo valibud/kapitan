@@ -58,14 +58,16 @@ def main():
                              metavar='VAR',
                              help='set variables')
     eval_parser.add_argument('--search-path', '-J', type=str,
-                             default=from_dot_kapitan('eval', 'search-path', '.'),
+                             default=from_dot_kapitan('eval', 'search-path', ['.']),
                              metavar='JPATH',
+                             nargs='+',
                              help='set search path, default is "."')
 
     compile_parser = subparser.add_parser('compile', help='compile targets')
     compile_parser.add_argument('--search-path', '-J', type=str,
                                 default=from_dot_kapitan('compile', 'search-path', '.'),
                                 metavar='JPATH',
+                                nargs='+',
                                 help='set search path, default is "."')
     compile_parser.add_argument('--verbose', '-v', help='set verbose mode',
                                 action='store_true',
@@ -190,7 +192,7 @@ def main():
 
     if cmd == 'eval':
         file_path = args.jsonnet_file
-        search_path = os.path.abspath(args.search_path)
+        search_path = [os.path.abspath(path) for path in args.search_path]
         ext_vars = {}
         if args.vars:
             ext_vars = dict(var.split('=') for var in args.vars)

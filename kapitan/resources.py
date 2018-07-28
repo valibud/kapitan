@@ -111,7 +111,9 @@ def search_imports(cwd, import_str, search_path):
     # if import_str not found, search in search_path
     if not os.path.exists(full_import_path):
         install_path = os.path.dirname(kapitan_install_path)
-        for path in (install_path, search_path):
+        search_path = tuple(path for path in [install_path] + search_path)
+
+        for path in search_path:
             _full_import_path = os.path.join(path, import_str)
             # if found, set as full_import_path
             if os.path.exists(_full_import_path):
